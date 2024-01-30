@@ -1,0 +1,37 @@
+- 👋 Hi, I’m @abirinfoksa1
+- 👀 I’m interested in ...
+- 🌱 I’m currently learning ...
+- 💞️ I’m looking to collaborate on ...
+- 📫 How to reach me ...
+- 😄 Pronouns: ...
+- ⚡ Fun fact: ...
+
+<!---
+abirinfoksa1/abirinfoksa1 is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+You can click the Preview link to take a look at your changes.
+--->
+uses: navikt/github-app-token-generator@v1
+id: get-token
+with:
+  private-key: ${{ secrets.PRIVATE_KEY }}
+  app-id: ${{ secrets.APP_ID }}
+  repo: some/repo
+  name: Checkout repos
+on: push
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: navikt/github-app-token-generator@v1
+      id: get-token
+      with:
+        private-key: ${{ secrets.PRIVATE_KEY }}
+        app-id: ${{ secrets.APP_ID }}
+
+    - name: Check out an other repo
+      uses: actions/checkout@v2
+      with:
+        repository: owner/repo
+        token: ${{ steps.get-token.outputs.token }}
